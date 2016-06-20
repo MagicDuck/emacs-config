@@ -96,6 +96,12 @@
          ("C-x c SPC" . helm-all-mark-rings)))
 (ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally as it seems to conflict with helm
 
+;; great for describing bindings
+(use-package helm-descbinds
+  :defer t
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds)))
+
 ;;-------------------------------------------------------------------------
 ;; evil
 
