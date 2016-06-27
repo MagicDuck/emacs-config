@@ -51,6 +51,8 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
+;; keybindings
+
 ;;-------------------------------------------------------------------------
 ;; theme/font
 
@@ -63,6 +65,9 @@
   :defer t)
 
 (set-frame-font "Inconsolata 12")
+
+;; maximize emacs on load
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;-------------------------------------------------------------------------
 ;; helm
@@ -80,8 +85,20 @@
           helm-yas-display-key-on-candidate t
           helm-quick-update t
           helm-M-x-requires-pattern nil
-          helm-ff-skip-boring-files t)
-    (helm-mode))
+          helm-split-window-in-side-p t ; open helm buffer inside current window, not occupy whole other window
+          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+          helm-ff-file-name-history-use-recentf t
+          helm-ff-skip-boring-files t
+          helm-buffers-fuzzy-matching t
+          helm-recentf-fuzzy-match    t
+          helm-M-x-fuzzy-match t
+    )
+    (helm-mode)
+    (helm-autoresize-mode t)
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+    )
   ;; TODO: look at these bindings and see which make sense
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
