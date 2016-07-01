@@ -70,6 +70,61 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;-------------------------------------------------------------------------
+;; evil
+
+(use-package evil
+    :init
+    (progn
+        ;; This has to be before we invoke evil-mode due to:
+        ;; https://github.com/cofi/evil-leader/issues/10
+        (use-package evil-leader
+            :init (global-evil-leader-mode)
+            :config
+            (progn
+                (setq evil-leader/in-all-states t)
+                (evil-leader/set-leader ",")
+
+                ;; keyboard shortcuts
+                (evil-leader/set-key
+                    ;; "a" 'ag-project
+                    ;; "a" 'ag
+                    ;; "b" 'ido-switch-buffer
+                    ;; "c" 'mc/mark-next-like-this
+                    ;; "c" 'mc/mark-all-like-this
+                    ;; "e" 'er/expand-region
+                    ;; "e" 'mc/edit-lines
+                    ;; "f" 'ido-find-file
+                    ;; "g" 'magit-status
+                    ;; "i" 'idomenu
+                    ;; "j" 'ace-jump-mode
+                    ;; "k" 'kill-buffer
+                    ;; "k" 'kill-this-buffer
+                    ;; "o" 'occur
+                    ;; "p" 'magit-find-file-completing-read
+                    ;; "r" 'recentf-ido-find-file
+                    ;; "s" 'ag-project
+                    ;; "t" 'bw-open-term
+                    ;; "t" 'eshell
+                    "w" 'save-buffer
+                    ;; "x" 'smex
+                )
+            )
+        )
+    )
+    :config
+    (evil-mode t)
+
+    ;; esc should always quit: http://stackoverflow.com/a/10166400/61435
+    (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
+    (define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
+    (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
+    (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
+    (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
+)
+
+;;-------------------------------------------------------------------------
 ;; helm
 
 (use-package helm
@@ -100,7 +155,9 @@
     (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
     )
   ;; TODO: look at these bindings and see which make sense
-  :bind (("C-c h" . helm-mini)
+  :bind (
+         ("C-c h" . helm-mini)
+         ("C-p" . helm-mini)
          ("C-h a" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-buffers-list)
@@ -118,10 +175,3 @@
   :defer t
   :bind (("C-h b" . helm-descbinds)
          ("C-h w" . helm-descbinds)))
-
-;;-------------------------------------------------------------------------
-;; evil
-
-(use-package evil
-    :config
-    (evil-mode t))
