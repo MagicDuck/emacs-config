@@ -51,7 +51,23 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
+;;-------------------------------------------------------------------------
 ;; keybindings
+
+;; comment/uncomment line
+;; Original idea from
+;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
+(defun comment-dwim-line (&optional arg)
+    "Replacement for the comment-dwim command.
+    If no region is selected and current line is not blank and we are not at the end of the line,
+    then comment current line.
+    Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+    (interactive "*P")
+    (comment-normalize-vars)
+    (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+        (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg)))
+(global-set-key (kbd "M-;") 'comment-dwim-line)
 
 ;;-------------------------------------------------------------------------
 ;; theme/font
@@ -64,7 +80,8 @@
   flatui-theme :init (load-theme 'flatui t)
   :defer t)
 
-(set-frame-font "Inconsolata 12")
+;;(set-frame-font "Inconsolata 12")
+(set-frame-font "Droid Sans Mono 11")
 
 ;; maximize emacs on load
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -94,7 +111,9 @@
                     ;; "e" 'er/expand-region
                     ;; "e" 'mc/edit-lines
                     ;; "f" 'ido-find-file
-                    ;; "g" 'magit-status
+                    "f" 'helm-projectile-find-file
+                    "b" 'helm-buffers-list
+                    "s" 'magit-status
                     ;; "i" 'idomenu
                     ;; "j" 'ace-jump-mode
                     ;; "k" 'kill-buffer
@@ -115,14 +134,25 @@
     (evil-mode t)
 
     ;; esc should always quit: http://stackoverflow.com/a/10166400/61435
-    (define-key evil-normal-state-map [escape] 'keyboard-quit)
-    (define-key evil-visual-state-map [escape] 'keyboard-quit)
-    (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
-    (define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
-    (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
-    (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
-    (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
+    ;; (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    ;; (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    ;; (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
+    ;; (define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
+    ;; (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
+    ;; (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
+    ;; (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 )
+
+(use-package evil-escape
+    :config
+    (setq-default evil-escape-key-sequence "jk")
+    (setq-default evil-escape-delay 0.1)
+    (evil-escape-mode t)
+)
+
+;; evil - magit integration
+(use-package evil-magit)
+
 
 ;;-------------------------------------------------------------------------
 ;; helm
@@ -157,9 +187,6 @@
   ;; TODO: look at these bindings and see which make sense
   :bind (
          ("C-c h" . helm-mini)
-         ("C-p" . helm-mini)
-         ("C-h a" . helm-apropos)
-         ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-buffers-list)
          ("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
@@ -175,3 +202,49 @@
   :defer t
   :bind (("C-h b" . helm-descbinds)
          ("C-h w" . helm-descbinds)))
+
+
+;;------------------------------------------------------------------------------------------
+;; projectile
+
+(use-package projectile
+  :diminish projectile-mode
+  :config
+  (progn
+    (setq projectile-keymap-prefix (kbd "C-c p"))
+    (setq projectile-completion-system 'default)
+    (setq projectile-enable-caching t)
+    (setq projectile-indexing-method 'alien)
+    (setq projectile-enable-caching t)
+    (add-to-list 'projectile-globally-ignored-files "node-modules"))
+  :config
+  (projectile-global-mode))
+(use-package helm-projectile)
+
+;;-------------------------------------------------------------------------------------------
+;; git
+(use-package magit
+    :config
+    (progn
+        (when (equal system-type 'windows-nt)
+          (setq magit-git-executable "c:/bin/git/bin/git.exe"))
+        (setq magit-diff-options '("-b")) ; ignore whitespace
+    )
+)
+
+
+;;-------------------------------------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+        (quote
+         (evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
