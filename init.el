@@ -29,6 +29,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (fset 'yes-or-no-p 'y-or-n-p) ;; Changes all yes/no questions to y/n type
 (global-hl-line-mode 1) ;; highlight current line
+(set-face-bold-p 'bold nil) ;; disable bold
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist '(("." . "~/.emacs-backups")))
@@ -81,6 +82,7 @@
   :defer t)
 
 ;;(set-frame-font "Inconsolata 12")
+;; (set-frame-font "Droid Sans Mono Slashed For Powerline 11")
 (set-frame-font "Droid Sans Mono 11")
 
 ;; maximize emacs on load
@@ -233,15 +235,49 @@
 )
 
 
+;;---------------------------------------------------------------------------------
+;; smart-line/powerline
+
+;; (use-package telephone-line
+;;   :config
+;;   (setq telephone-line-lhs
+;;         '((evil   . (telephone-line-evil-tag-segment))
+;;           (accent . (telephone-line-vc-segment
+;;                      telephone-line-erc-modified-channels-segment
+;;                      telephone-line-process-segment))
+;;           (nil    . (telephone-line-minor-mode-segment
+;;                      telephone-line-buffer-segment))))
+;;   (setq telephone-line-rhs
+;;         '((nil    . (telephone-line-misc-info-segment))
+;;           (accent . (telephone-line-major-mode-segment))
+;;           (evil   . (telephone-line-airline-position-segment))))
+;;   (telephone-line-mode t))
+
+(use-package smart-mode-line
+    :config
+    (setq sml/theme 'respectful)
+    (setq sml/no-confirm-load-theme t)
+    (sml/setup)
+)
+
+(use-package nyan-mode
+    :config
+    (setq nyan-animate-nyancat t)
+    (setq nyan-wavy-trail nil)
+    (nyan-mode))
+
 ;;-------------------------------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
-        (quote
-         (evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
+   (quote
+    (telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
