@@ -25,11 +25,11 @@
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
 (menu-bar-mode -1)
-(global-linum-mode 1) ;; display line numbers
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (fset 'yes-or-no-p 'y-or-n-p) ;; Changes all yes/no questions to y/n type
 (global-hl-line-mode 1) ;; highlight current line
 (set-face-bold-p 'bold nil) ;; disable bold
+(setq x-select-enable-clipboard t) ;; use system clipboard -- Note: to paste in insert mode, use Ctrl-o p
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist '(("." . "~/.emacs-backups")))
@@ -51,6 +51,13 @@
 (set-default-coding-systems 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+
+(global-linum-mode 1) ;; display line numbers
+;; (use-package linum-relative
+;;   :config
+;;   (setq linum-relative-current-symbol ">>")
+;;   (global-linum-mode 1)
+;;   (linum-relative-global-mode 1))
 
 ;;-------------------------------------------------------------------------
 ;; keybindings
@@ -116,6 +123,7 @@
                     "f" 'helm-projectile-find-file
                     "b" 'helm-buffers-list
                     "s" 'magit-status
+                    "r" 'ranger
                     ;; "i" 'idomenu
                     ;; "j" 'ace-jump-mode
                     ;; "k" 'kill-buffer
@@ -221,7 +229,18 @@
     (add-to-list 'projectile-globally-ignored-files "node-modules"))
   :config
   (projectile-global-mode))
-(use-package helm-projectile)
+;;(use-package helm-projectile)
+(use-package helm-projectile
+  :ensure t
+  :init
+  (helm-projectile-on)
+  (setq projectile-switch-project-action 'helm-projectile)
+  (defvar helm-source-file-not-found
+    (helm-build-dummy-source
+        "Create file"
+      :action 'find-file))
+  (add-to-list 'helm-projectile-sources-list helm-source-file-not-found t)
+  )
 
 ;;-------------------------------------------------------------------------------------------
 ;; git
@@ -261,10 +280,29 @@
 )
 
 (use-package nyan-mode
-    :config
+    :init
     (setq nyan-animate-nyancat t)
     (setq nyan-wavy-trail nil)
     (nyan-mode))
+
+;;-------------------------------------------------------------------------------------------
+;; ranger
+;; https://github.com/ralesi/ranger.el#standard-ranger-bindings
+
+(use-package ranger
+    :config
+    (setq ranger-max-preview-size 10)
+    (setq ranger-excluded-extensions '("mkv" "iso" "mp4"))
+    (setq ranger-dont-show-binary t)
+)
+
+;;-------------------------------------------------------------------------------------------
+;; javascript
+
+(use-package js2-mode
+  :config
+  (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
+)
 
 ;;-------------------------------------------------------------------------------------------
 (custom-set-variables
@@ -277,7 +315,7 @@
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
+    (js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
