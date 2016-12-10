@@ -310,6 +310,14 @@
 )
 
 ;;-------------------------------------------------------------------------------------------
+;; autocomplete
+
+(use-package company
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  (setq company-idle-delay 0.1))
+
+;;-------------------------------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
