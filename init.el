@@ -312,9 +312,11 @@
   (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
 )
 
+;; linting
+;; NOTE: you will need to install external tools like node jshint for things to work
+;; use flycheck-verify-setup to make sure stuff is installed
 (use-package flycheck
     :config
-    ;; linting
     (add-hook 'after-init-hook #'global-flycheck-mode)
     ;; (add-hook 'js2-mode-hook 'flycheck-mode)
     (progn
@@ -323,8 +325,6 @@
             (setq flycheck-jshintrc "~/.emacs.d/.jshintrc"))
     )
 )
-
-(add-hook 'js2-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
 ;;-------------------------------------------------------------------------------------------
 ;; autocomplete
