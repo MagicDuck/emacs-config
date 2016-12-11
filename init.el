@@ -128,7 +128,7 @@
                     ;; "j" 'ace-jump-mode
                     ;; "k" 'kill-buffer
                     ;; "k" 'kill-this-buffer
-                    ;; "o" 'occur
+                    "o" 'occur
                     ;; "p" 'magit-find-file-completing-read
                     ;; "r" 'recentf-ido-find-file
                     ;; "s" 'ag-project
@@ -147,7 +147,10 @@
     (use-package expand-region
       :config
       (setq expand-region-contract-fast-key "r")
-    )
+      )
+
+    ;; allow (*) to select symbols
+    (setq-default evil-symbol-word-search 'symbol)
 
     ;; esc should always quit: http://stackoverflow.com/a/10166400/61435
     ;; (define-key evil-normal-state-map [escape] 'keyboard-quit)
@@ -309,6 +312,20 @@
   (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
 )
 
+(use-package flycheck
+    :config
+    ;; linting
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+    ;; (add-hook 'js2-mode-hook 'flycheck-mode)
+    (progn
+        (if (equal system-type 'windows-nt)
+            (setq flycheck-jshintrc "c:/code/hana_epm_fpa/config/.jshintrc") ;; TODO use correct path
+            (setq flycheck-jshintrc "~/.emacs.d/.jshintrc"))
+    )
+)
+
+(add-hook 'js2-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
 ;;-------------------------------------------------------------------------------------------
 ;; autocomplete
 
@@ -324,11 +341,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-        (quote
-         ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
-        (quote
-         (expand-region js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
+   (quote
+    (expand-region js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
