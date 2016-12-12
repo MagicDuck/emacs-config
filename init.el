@@ -1,7 +1,15 @@
 ;; useful to look at: http://pages.sachachua.com/.emacs.d/Sacha.html
 ;;-------------------------------------------------------------------------
-;; package management
+;; proxy
 
+(when (equal system-type 'windows-nt)
+    (setq url-proxy-services
+    '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+        ("http" . "proxy:8080")
+        ("https" . "proxy:8080")))
+)
+
+;; package management
 (require 'package)
 (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
@@ -52,7 +60,7 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-;; relative line numbers
+;; RELATIVE line numbers
 (use-package linum-relative
   :config
   ;; (setq linum-relative-current-symbol ">>")
@@ -87,9 +95,11 @@
   flatui-theme :init (load-theme 'flatui t)
   :defer t)
 
-;;(set-frame-font "Inconsolata 12")
+;; (print (font-family-list))
 ;; (set-frame-font "Droid Sans Mono Slashed For Powerline 11")
-(set-frame-font "Droid Sans Mono 11")
+(if (equal system-type 'windows-nt)
+    (set-frame-font "Consolas 12")
+    (set-frame-font "Droid Sans Mono 11"))
 
 ;; maximize emacs on load
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
