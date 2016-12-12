@@ -331,7 +331,7 @@
     ;; (add-hook 'js2-mode-hook 'flycheck-mode)
     (progn
         (if (equal system-type 'windows-nt)
-            (setq flycheck-jshintrc "c:/code/hana_epm_fpa/config/.jshintrc") ;; TODO use correct path
+            (setq flycheck-jshintrc "c:/code/hana_epm_fpa/config/coding/jshintconfig.js")
             (setq flycheck-jshintrc "~/.emacs.d/.jshintrc"))
     )
 )
