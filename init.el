@@ -146,9 +146,11 @@
                     ;; "t" 'eshell
                     "w" 'save-buffer
                     "g" 'helm-git-grep
-                    "u" (lambda () (interactive)
-                          (if (fboundp 'projectile-project-root) (helm-do-pt (projectile-project-root)) (Error "Projectile is not available!")))
-                    "h" 'helm-projectile-pt
+                    ;; "u" (lambda () (interactive)
+                    ;;       (if (fboundp 'projectile-project-root) (helm-do-pt (projectile-project-root)) (Error "Projectile is not available!")))
+                    "h" 'helm-projectile-pt  ;; note: pt is set up even scm ignored files
+                    "u" 'pt-regexp-file-pattern
+                    "d" 'delete-window
                     ;; "x" 'smex
                 )
             )
@@ -353,7 +355,10 @@
 ;;-------------------------------------------------------------------------------------------
 ;; searching
 
-(use-package pt)
+(use-package pt
+  :config
+  (evil-make-overriding-map pt-search-mode-map 'normal)
+  )
 (use-package helm-pt)
 (use-package helm-git-grep)
 (use-package helm-ls-git)
@@ -367,6 +372,7 @@
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+ '(helm-pt-args (quote ("--smart-case --skip-vcs-ignores")))
  '(package-selected-packages
    (quote
     (helm-git-grep helm-ls-git helm-pt pt expand-region js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme)))
