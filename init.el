@@ -364,6 +364,15 @@
 (use-package helm-ls-git)
 
 ;;-------------------------------------------------------------------------------------------
+;; snippets
+
+(use-package yasnippet
+  :config (yas-global-mode 1)
+  :init
+  (bind-key "C-." 'yas-expand)
+)
+
+;;-------------------------------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -375,7 +384,7 @@
  '(helm-pt-args (quote ("--smart-case --skip-vcs-ignores")))
  '(package-selected-packages
    (quote
-    (helm-git-grep helm-ls-git helm-pt pt expand-region js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme)))
+    (yasnippet helm-git-grep helm-ls-git helm-pt pt expand-region js2-mode ranger telephone-line smart-mode-line-powerline-theme smart-mode-line evil-magit use-package twilight-bright-theme meacupla-theme material-theme magit helm-projectile helm-descbinds flatui-theme evil-leader evil-escape company color-theme-solarized color-theme-sanityinc-tomorrow ample-theme)))
  '(pt-arguments
    (quote
     ("--smart-case --before=2 --after=2 --skip-vcs-ignores"))))
